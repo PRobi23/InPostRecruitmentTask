@@ -1,4 +1,4 @@
-package pl.inpost.recruitmenttask.util
+package pl.inpost.recruitmenttask.core.util
 
 import androidx.lifecycle.MutableLiveData
 

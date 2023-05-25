@@ -1,4 +1,4 @@
-package pl.inpost.recruitmenttask.network.api
+package pl.inpost.recruitmenttask.data.remote.api
 
 import android.content.Context
 import com.squareup.moshi.Moshi
@@ -6,17 +6,24 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import pl.inpost.recruitmenttask.R
-import pl.inpost.recruitmenttask.network.ApiTypeAdapter
-import pl.inpost.recruitmenttask.network.model.*
+import pl.inpost.recruitmenttask.data.remote.ApiTypeAdapter
+import pl.inpost.recruitmenttask.data.remote.dto.CustomerNetworkDTO
+import pl.inpost.recruitmenttask.data.remote.dto.EventLogNetworkDTO
+import pl.inpost.recruitmenttask.data.remote.dto.OperationsNetworkDTO
+import pl.inpost.recruitmenttask.data.remote.dto.ShipmentDTO
+import pl.inpost.recruitmenttask.data.remote.dto.ShipmentStatus
+import pl.inpost.recruitmenttask.data.remote.dto.ShipmentType
+import pl.inpost.recruitmenttask.data.remote.dto.ShipmentsResponse
+import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 import java.time.ZonedDateTime
 import kotlin.random.Random
 
 class MockShipmentApi(
     @ApplicationContext private val context: Context,
     apiTypeAdapter: ApiTypeAdapter
-) : ShipmentApi {
+)  {
 
-    private val response by lazy {
+    val response by lazy {
         val json = context.resources.openRawResource(R.raw.mock_shipment_api_response)
             .bufferedReader()
             .use { it.readText() }
@@ -29,32 +36,21 @@ class MockShipmentApi(
 
         jsonAdapter.fromJson(json) as ShipmentsResponse
     }
-    private var firstUse = true
-
-    override suspend fun getShipments(): List<ShipmentNetwork> {
-        delay(1000)
-        return if (firstUse) {
-            firstUse = false
-            emptyList()
-        } else {
-            response.shipments
-        }
-    }
 }
 
 private fun mockShipmentNetwork(
     number: String = Random.nextLong(1, 9999_9999_9999_9999).toString(),
     type: ShipmentType = ShipmentType.PARCEL_LOCKER,
     status: ShipmentStatus = ShipmentStatus.DELIVERED,
-    sender: CustomerNetwork? = mockCustomerNetwork(),
-    receiver: CustomerNetwork? = mockCustomerNetwork(),
-    operations: OperationsNetwork = mockOperationsNetwork(),
-    eventLog: List<EventLogNetwork> = emptyList(),
+    sender: CustomerNetworkDTO? = mockCustomerNetwork(),
+    receiver: CustomerNetworkDTO? = mockCustomerNetwork(),
+    operations: OperationsNetworkDTO = mockOperationsNetwork(),
+    eventLog: List<EventLogNetworkDTO> = emptyList(),
     openCode: String? = null,
     expireDate: ZonedDateTime? = null,
     storedDate: ZonedDateTime? = null,
     pickupDate: ZonedDateTime? = null
-) = ShipmentNetwork(
+) = ShipmentDTO(
     number = number,
     shipmentType = type.name,
     status = status.name,
@@ -72,7 +68,7 @@ private fun mockCustomerNetwork(
     email: String = "name@email.com",
     phoneNumber: String = "123 123 123",
     name: String = "Jan Kowalski"
-) = CustomerNetwork(
+) = CustomerNetworkDTO(
     email = email,
     phoneNumber = phoneNumber,
     name = name
@@ -85,7 +81,7 @@ private fun mockOperationsNetwork(
     highlight: Boolean = false,
     expandAvizo: Boolean = false,
     endOfWeekCollection: Boolean = false
-) = OperationsNetwork(
+) = OperationsNetworkDTO(
     manualArchive = manualArchive,
     delete = delete,
     collect = collect,

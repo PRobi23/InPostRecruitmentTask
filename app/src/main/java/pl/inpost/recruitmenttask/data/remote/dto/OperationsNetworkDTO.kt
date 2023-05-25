@@ -1,4 +1,4 @@
-package pl.inpost.recruitmenttask.network.model
+package pl.inpost.recruitmenttask.data.remote.dto
 
 /**
  * @param manualArchive - shipment can be manually (gesture) archived
@@ -8,7 +8,7 @@ package pl.inpost.recruitmenttask.network.model
  * @param expandAvizo - shipment time to pick up can be expanded - show button
  * @param endOfWeekCollection - shipment will be available to pick up over the weekend - change colors
  */
-data class OperationsNetwork(
+data class OperationsNetworkDTO(
     val manualArchive: Boolean,
     val delete: Boolean,
     val collect: Boolean,
