@@ -9,7 +9,7 @@ import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 
 class ShipmentRepositoryImpl(
     private val mockShipmentApi: MockShipmentApi,
-    private val shipmentDtoToShipmentMapper: Mapper<ShipmentDTO, Shipment>
+    private val shipmentDtoToShipmentMapper: Mapper<ShipmentDTO, Shipment>,
 ) : ShipmentRepository {
 
     private var firstUse = true

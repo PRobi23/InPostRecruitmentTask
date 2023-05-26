@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import pl.inpost.recruitmenttask.databinding.FragmentShipmentListBinding
 import pl.inpost.recruitmenttask.databinding.ShipmentItemBinding
@@ -14,6 +15,9 @@ class ShipmentListFragment : Fragment() {
 
     private val viewModel: ShipmentListViewModel by viewModels()
     private var _binding: FragmentShipmentListBinding? = null
+    private val shipmentAdapter by lazy {
+        ShipmentAdapter()
+    }
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -25,17 +29,23 @@ class ShipmentListFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.shipmentsView.apply {
+            adapter = shipmentAdapter
+        }
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.refreshData()
+        }
+
         viewModel.viewState.observe(requireActivity()) { shipments ->
-            shipments.forEach { shipmentNetwork ->
-                val shipmentItemBinding = ShipmentItemBinding.inflate(layoutInflater).apply {
-                    shipmentNumber.text = shipmentNetwork.number
-                    //status.text = shipmentNetwork.status
-                }
-                binding.scrollViewContent.addView(shipmentItemBinding.root)
+            if (shipments.isEmpty()) {
+                binding.emptyShipmentsText.visibility = View.VISIBLE
+            } else {
+                binding.emptyShipmentsText.visibility = View.GONE
+                shipmentAdapter.setItems(shipments)
             }
+            binding.swipeRefresh.isRefreshing = false
         }
     }
 

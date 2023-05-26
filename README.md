@@ -19,7 +19,7 @@ Organize and refactor code the way you like to work (packages, modules, layers, 
 1. Add grouping to the list of Shipments by flag **ShipmentNetwork.operations.highlight**
 2. Style list items as in Figma (link: https://www.figma.com/file/MzPR3whRl6KB1fFnkyM6Or/recruitment-task)
 3. Sort list items in groups by (the closest date to current date should be at top of the list):
-    * status - order is described in `ShipmentStatus.kt` file (first item, should be at the top of list)
+    * status - order is described in `ShipmentStaetus.kt` file (first item, should be at the top of list)
     * pickupDate
     * expireDate
     * storedDate

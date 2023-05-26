@@ -7,6 +7,7 @@ class ShipmentDtoToShipmentMapper : Mapper<ShipmentDTO, Shipment> {
 
     override fun map(input: ShipmentDTO): Shipment = Shipment(
         number = input.number,
-        shipmentType = input.shipmentType
+        shipmentType = input.shipmentType,
+        status = input.status
     )
 }

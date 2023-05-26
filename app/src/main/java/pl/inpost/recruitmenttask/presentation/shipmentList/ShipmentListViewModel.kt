@@ -12,11 +12,12 @@ import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 import pl.inpost.recruitmenttask.data.remote.dto.ShipmentDTO
 import pl.inpost.recruitmenttask.core.util.setState
 import pl.inpost.recruitmenttask.domain.data.Shipment
+import pl.inpost.recruitmenttask.domain.usecase.GetShipmentsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class ShipmentListViewModel @Inject constructor(
-    private val shipmentApi: ShipmentRepository
+    private val getShipmentsUseCase: GetShipmentsUseCase
 ) : ViewModel() {
 
     private val mutableViewState = MutableLiveData<List<Shipment>>(emptyList())
@@ -26,9 +27,9 @@ class ShipmentListViewModel @Inject constructor(
         refreshData()
     }
 
-    private fun refreshData() {
+    fun refreshData() {
         viewModelScope.launch {
-            val shipments = shipmentApi.getShipments()
+            val shipments = getShipmentsUseCase()
             mutableViewState.setState { shipments }
         }
     }
