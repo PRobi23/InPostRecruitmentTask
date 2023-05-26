@@ -53,32 +53,38 @@ class GetShipmentsUseCaseTest {
                 Shipment(
                     number = "0",
                     shipmentType = ShipmentType.PARCEL_LOCKER.name,
-                    status = ShipmentStatus.DELIVERED.name
+                    status = ShipmentStatus.DELIVERED.name,
+                    operationsHighlight = true
                 ),
                 Shipment(
                     number = "1",
                     shipmentType = ShipmentType.PARCEL_LOCKER.name,
-                    status = ShipmentStatus.DELIVERED.name
+                    status = ShipmentStatus.DELIVERED.name,
+                    operationsHighlight = true
                 ),
                 Shipment(
                     number = "2",
                     shipmentType = ShipmentType.PARCEL_LOCKER.name,
-                    status = ShipmentStatus.DELIVERED.name
+                    status = ShipmentStatus.DELIVERED.name,
+                    operationsHighlight = true
                 ),
                 Shipment(
                     number = "3",
                     shipmentType = ShipmentType.PARCEL_LOCKER.name,
-                    status = ShipmentStatus.DELIVERED.name
+                    status = ShipmentStatus.DELIVERED.name,
+                    operationsHighlight = true
                 ),
                 Shipment(
                     number = "4",
                     shipmentType = ShipmentType.PARCEL_LOCKER.name,
-                    status = ShipmentStatus.DELIVERED.name
+                    status = ShipmentStatus.DELIVERED.name,
+                    operationsHighlight = true
                 ),
                 Shipment(
                     number = "5",
                     shipmentType = ShipmentType.PARCEL_LOCKER.name,
-                    status = ShipmentStatus.DELIVERED.name
+                    status = ShipmentStatus.DELIVERED.name,
+                    operationsHighlight = true
                 )
             )
             // when

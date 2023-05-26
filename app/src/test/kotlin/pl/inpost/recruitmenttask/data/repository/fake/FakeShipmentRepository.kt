@@ -13,7 +13,8 @@ class FakeShipmentRepository : ShipmentRepository {
             val shipment = Shipment(
                 number = shipmentDTO.number,
                 shipmentType = shipmentDTO.shipmentType,
-                status = shipmentDTO.status
+                status = shipmentDTO.status.toString(),
+                operationsHighlight = true
             )
             shipments.add(shipment)
         }

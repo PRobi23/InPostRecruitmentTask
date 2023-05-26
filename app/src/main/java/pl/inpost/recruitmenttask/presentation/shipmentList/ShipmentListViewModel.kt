@@ -13,15 +13,17 @@ import pl.inpost.recruitmenttask.data.remote.dto.ShipmentDTO
 import pl.inpost.recruitmenttask.core.util.setState
 import pl.inpost.recruitmenttask.domain.data.Shipment
 import pl.inpost.recruitmenttask.domain.usecase.GetShipmentsUseCase
+import pl.inpost.recruitmenttask.domain.usecase.GroupShipmentsByOperationHighlightUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class ShipmentListViewModel @Inject constructor(
-    private val getShipmentsUseCase: GetShipmentsUseCase
+    private val getShipmentsUseCase: GetShipmentsUseCase,
+    private val groupShipmentsByOperationHighlightUseCase: GroupShipmentsByOperationHighlightUseCase
 ) : ViewModel() {
 
-    private val mutableViewState = MutableLiveData<List<Shipment>>(emptyList())
-    val viewState: LiveData<List<Shipment>> = mutableViewState
+    private val mutableViewState = MutableLiveData<Map<Boolean, List<Shipment>>>(emptyMap())
+    val viewState: LiveData<Map<Boolean, List<Shipment>>> = mutableViewState
 
     init {
         refreshData()
@@ -30,7 +32,9 @@ class ShipmentListViewModel @Inject constructor(
     fun refreshData() {
         viewModelScope.launch {
             val shipments = getShipmentsUseCase()
-            mutableViewState.setState { shipments }
+            val groupedShipments = groupShipmentsByOperationHighlightUseCase(shipments)
+
+            mutableViewState.setState { groupedShipments }
         }
     }
 }

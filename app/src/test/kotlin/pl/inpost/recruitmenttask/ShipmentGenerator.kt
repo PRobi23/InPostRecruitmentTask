@@ -8,18 +8,18 @@ import pl.inpost.recruitmenttask.data.remote.dto.ShipmentStatus
 import pl.inpost.recruitmenttask.data.remote.dto.ShipmentType
 import pl.inpost.recruitmenttask.domain.data.Shipment
 import java.time.ZonedDateTime
-import kotlin.random.Random
 
 object ShipmentGenerator {
 
     private val alphabet: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
     private fun randomWord(): String = List((1..10).random()) { alphabet.random() }.joinToString("")
 
-    fun createShipment(): Shipment =
+    fun createShipment(operationsHighlight: Boolean = true): Shipment =
         Shipment(
             number = randomWord(),
             shipmentType = randomWord(),
-            status = randomWord()
+            status = randomWord(),
+            operationsHighlight = operationsHighlight
         )
 
     fun mockShipmentNetwork(
