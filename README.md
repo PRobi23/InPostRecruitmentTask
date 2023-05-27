@@ -39,3 +39,9 @@ If for some reason Figma link stops working, here you can see the requested desi
 ![Design from Figma](./images/Figma.png)
 
 # Good luck! 💪
+
+Feedback
+1. For me in the design was not clear: I don't know what the icon depends on if it's a calendar or a car, and what date to show. In the mapper you see my logic,
+this might be wrong, but the requirement was not clear for me.
+
+2. I would use compose, but since it was started in the "old way" I've went with that.

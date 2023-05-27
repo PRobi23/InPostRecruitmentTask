@@ -11,6 +11,7 @@ import pl.inpost.recruitmenttask.ShipmentGenerator
 import pl.inpost.recruitmenttask.data.remote.dto.ShipmentStatus
 import pl.inpost.recruitmenttask.data.remote.dto.ShipmentType
 import pl.inpost.recruitmenttask.data.repository.fake.FakeShipmentRepository
+import pl.inpost.recruitmenttask.domain.data.DateType
 import pl.inpost.recruitmenttask.domain.data.Shipment
 import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 
@@ -54,37 +55,55 @@ class GetShipmentsUseCaseTest {
                     number = "0",
                     shipmentType = ShipmentType.PARCEL_LOCKER.name,
                     status = ShipmentStatus.DELIVERED.name,
-                    operationsHighlight = true
+                    operationsHighlight = true,
+                    senderEmail = "name@email.com",
+                    dateToShow = null,
+                    dateType = DateType.NO_DATE
                 ),
                 Shipment(
                     number = "1",
                     shipmentType = ShipmentType.PARCEL_LOCKER.name,
                     status = ShipmentStatus.DELIVERED.name,
-                    operationsHighlight = true
+                    operationsHighlight = true,
+                    senderEmail = "name@email.com",
+                    dateToShow = null,
+                    dateType = DateType.NO_DATE
                 ),
                 Shipment(
                     number = "2",
                     shipmentType = ShipmentType.PARCEL_LOCKER.name,
                     status = ShipmentStatus.DELIVERED.name,
-                    operationsHighlight = true
+                    operationsHighlight = true,
+                    senderEmail = "name@email.com",
+                    dateToShow = null,
+                    dateType = DateType.NO_DATE
                 ),
                 Shipment(
                     number = "3",
                     shipmentType = ShipmentType.PARCEL_LOCKER.name,
                     status = ShipmentStatus.DELIVERED.name,
-                    operationsHighlight = true
+                    operationsHighlight = true,
+                    senderEmail = "name@email.com",
+                    dateToShow = null,
+                    dateType = DateType.NO_DATE
                 ),
                 Shipment(
                     number = "4",
                     shipmentType = ShipmentType.PARCEL_LOCKER.name,
                     status = ShipmentStatus.DELIVERED.name,
-                    operationsHighlight = true
+                    operationsHighlight = true,
+                    senderEmail = "name@email.com",
+                    dateToShow = null,
+                    dateType = DateType.NO_DATE
                 ),
                 Shipment(
                     number = "5",
                     shipmentType = ShipmentType.PARCEL_LOCKER.name,
                     status = ShipmentStatus.DELIVERED.name,
-                    operationsHighlight = true
+                    operationsHighlight = true,
+                    senderEmail = "name@email.com",
+                    dateToShow = null,
+                    dateType = DateType.NO_DATE
                 )
             )
             // when

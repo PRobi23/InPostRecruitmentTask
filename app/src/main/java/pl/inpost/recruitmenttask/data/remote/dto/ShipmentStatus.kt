@@ -32,7 +32,7 @@ enum class ShipmentStatus(
     DELIVERED(R.string.status_delivered),
     OTHER(R.string.status_other),
     OUT_FOR_DELIVERY(R.string.status_out_for_delivery),
-    PICKUP_TIME_EXPIRED(R.string.status_pickup_time_expired),
+    PICKUP_TIME_EXPIRED(R.string.status_pickup_time_expiry),
     READY_TO_PICKUP(R.string.status_ready_to_pickup),
     RETURNED_TO_SENDER(R.string.status_returned_to_sender);
 }

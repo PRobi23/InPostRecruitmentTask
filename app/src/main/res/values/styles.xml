@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<resources>
+
+    <!-- General -->
+
+    <style name="InpostTheme" parent="Theme.AppCompat">
+        <item name="bottomSheetDialogTheme">@style/Theme.Design.BottomSheetDialog</item>
+    </style>
+
+    <!-- TextView: Base -->
+
+    <style name="InpostTheme.TextView" />
+
+    <style name="InpostTheme.TextView.Header">
+        <item name="android:fontFamily">@font/montserrat_light</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">@dimen/textsize_shipment_header</item>
+        <item name="lineHeight">@dimen/textline_shipment_header</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">3</item>
+    </style>
+
+    <style name="InpostTheme.TextView.Value">
+        <item name="android:fontFamily">@font/montserrat_light</item>
+        <item name="android:textColor">@color/arsenic</item>
+        <item name="android:textSize">@dimen/textsize_shipment_value</item>
+        <item name="lineHeight">@dimen/textline_shipment_value</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">3</item>
+    </style>
+
+    <style name="InpostTheme.TextView.Value.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+</resources>

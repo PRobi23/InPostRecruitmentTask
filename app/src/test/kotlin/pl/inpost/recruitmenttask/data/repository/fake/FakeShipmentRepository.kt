@@ -1,6 +1,7 @@
 package pl.inpost.recruitmenttask.data.repository.fake
 
 import pl.inpost.recruitmenttask.ShipmentGenerator
+import pl.inpost.recruitmenttask.domain.data.DateType
 import pl.inpost.recruitmenttask.domain.data.Shipment
 import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 
@@ -13,8 +14,11 @@ class FakeShipmentRepository : ShipmentRepository {
             val shipment = Shipment(
                 number = shipmentDTO.number,
                 shipmentType = shipmentDTO.shipmentType,
-                status = shipmentDTO.status.toString(),
-                operationsHighlight = true
+                status = shipmentDTO.status,
+                operationsHighlight = true,
+                senderEmail = "name@email.com",
+                dateToShow = null,
+                dateType = DateType.NO_DATE
             )
             shipments.add(shipment)
         }

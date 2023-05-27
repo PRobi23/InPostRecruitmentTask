@@ -1,13 +1,16 @@
 package pl.inpost.recruitmenttask
 
+import pl.inpost.recruitmenttask.core.util.formatZonedDateTime
 import pl.inpost.recruitmenttask.data.remote.dto.CustomerNetworkDTO
 import pl.inpost.recruitmenttask.data.remote.dto.EventLogNetworkDTO
 import pl.inpost.recruitmenttask.data.remote.dto.OperationsNetworkDTO
 import pl.inpost.recruitmenttask.data.remote.dto.ShipmentDTO
 import pl.inpost.recruitmenttask.data.remote.dto.ShipmentStatus
 import pl.inpost.recruitmenttask.data.remote.dto.ShipmentType
+import pl.inpost.recruitmenttask.domain.data.DateType
 import pl.inpost.recruitmenttask.domain.data.Shipment
 import java.time.ZonedDateTime
+import kotlin.random.Random.Default.nextInt
 
 object ShipmentGenerator {
 
@@ -19,7 +22,10 @@ object ShipmentGenerator {
             number = randomWord(),
             shipmentType = randomWord(),
             status = randomWord(),
-            operationsHighlight = operationsHighlight
+            operationsHighlight = operationsHighlight,
+            senderEmail = randomWord() + "@.gmail.com",
+            dateToShow = DateGenerator.getRandomZonedDateTime().formatZonedDateTime(),
+            dateType = DateType.values()[nextInt(3)]
         )
 
     fun mockShipmentNetwork(
@@ -31,18 +37,18 @@ object ShipmentGenerator {
         operations: OperationsNetworkDTO = mockOperationsNetwork(),
         eventLog: List<EventLogNetworkDTO> = emptyList(),
         openCode: String? = null,
-        expireDate: ZonedDateTime? = null,
+        expiryDate: ZonedDateTime? = null,
         storedDate: ZonedDateTime? = null,
-        pickupDate: ZonedDateTime? = null
+        pickUpDate: ZonedDateTime? = null
     ) = ShipmentDTO(
         number = number,
         shipmentType = type.name,
         status = status.name,
         eventLog = eventLog,
         openCode = openCode,
-        expiryDate = expireDate,
+        expiryDate = expiryDate,
         storedDate = storedDate,
-        pickUpDate = pickupDate,
+        pickUpDate = pickUpDate,
         receiver = receiver,
         sender = sender,
         operations = operations

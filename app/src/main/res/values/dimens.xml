@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Margin-->
+    <dimen name="margin_6dp">6dp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+
+    <!--Text size-->
+    <dimen name="textsize_shipment_header">11sp</dimen>
+    <dimen name="textsize_shipment_value">15sp</dimen>
+
+    <!--Line height-->
+
+    <dimen name="textline_shipment_header">16sp</dimen>
+    <dimen name="textline_shipment_value">24sp</dimen>
+</resources>
