@@ -7,6 +7,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import pl.inpost.recruitmenttask.R
@@ -21,6 +22,9 @@ class ShipmentListFragment : Fragment() {
     private var _binding: FragmentShipmentListBinding? = null
     private val shipmentAdapter by lazy {
         ShipmentAdapter()
+    }
+    private val shipmentHeaderAdapter by lazy {
+        ShipmentHeaderAdapter()
     }
     private val binding get() = _binding!!
 
@@ -37,18 +41,24 @@ class ShipmentListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.shipmentsView.apply {
-            adapter = shipmentAdapter
+            adapter = ConcatAdapter(shipmentHeaderAdapter, shipmentAdapter)
+            addItemDecoration(SpacingItemDecoration(resources.getDimensionPixelSize(R.dimen.item_spacing)))
         }
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.refreshData()
         }
 
-        viewModel.viewState.observe(requireActivity()) { shipments ->
-            if (shipments.isEmpty()) {
+        viewModel.viewState.observe(requireActivity()) { shipmentItems ->
+            if (shipmentItems.isEmpty()) {
                 binding.emptyShipmentsText.visibility = View.VISIBLE
             } else {
                 binding.emptyShipmentsText.visibility = View.GONE
-                shipmentAdapter.setItems(shipments.values.flatten())
+
+                val headerItems = shipmentItems.map { it.shipmentType }
+                val shipmentItemsList = shipmentItems.flatMap { it.shipments }
+
+                shipmentHeaderAdapter.setItems(headerItems)
+                shipmentAdapter.setItems(shipmentItemsList)
             }
             binding.swipeRefresh.isRefreshing = false
         }
@@ -63,12 +73,10 @@ class ShipmentListFragment : Fragment() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                // Add menu items here
                 menuInflater.inflate(R.menu.shipment_list_menu, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.readyToPickupShipmentsMenu -> {
                         true

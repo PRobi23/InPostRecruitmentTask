@@ -45,3 +45,6 @@ Feedback
 this might be wrong, but the requirement was not clear for me.
 
 2. I would use compose, but since it was started in the "old way" I've went with that.
+
+3. The menu was not clear, how do we want to add, and the grouping as well. For the group I've used the highlight flag. If it's true it's ready to pick up otherwise not.
+

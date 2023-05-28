@@ -122,7 +122,7 @@
         android:id="@+id/shipmentDetailsText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/shipment_sender_title"
+        android:text="@string/shipment_details"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@id/shipmentSenderEmailValue"
         app:layout_constraintEnd_toStartOf="@id/shipmentArrowIcon"

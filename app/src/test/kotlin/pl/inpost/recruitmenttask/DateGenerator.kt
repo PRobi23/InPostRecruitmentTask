@@ -6,6 +6,18 @@ import java.time.ZonedDateTime
 import kotlin.random.Random
 
 object DateGenerator {
+
+    val MOCK_ZONED_DATE_TIME = ZonedDateTime.of(
+        2023,
+        4,
+        23,
+        11,
+        45,
+        12,
+        2,
+        ZoneId.of("UTC")
+    )
+
     fun getRandomZonedDateTime(): ZonedDateTime {
         val randomDateTime = LocalDateTime.of(
             Random.nextInt(1998, 2023),    // Year (up to 9999)

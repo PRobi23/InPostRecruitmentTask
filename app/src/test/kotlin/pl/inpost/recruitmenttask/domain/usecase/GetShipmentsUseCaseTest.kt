@@ -8,11 +8,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import pl.inpost.recruitmenttask.ShipmentGenerator
-import pl.inpost.recruitmenttask.data.remote.dto.ShipmentStatus
-import pl.inpost.recruitmenttask.data.remote.dto.ShipmentType
+import pl.inpost.recruitmenttask.data.remote.dto.ShipmentTypeDTO
 import pl.inpost.recruitmenttask.data.repository.fake.FakeShipmentRepository
-import pl.inpost.recruitmenttask.domain.data.DateType
 import pl.inpost.recruitmenttask.domain.data.Shipment
+import pl.inpost.recruitmenttask.domain.data.ShipmentStatus
 import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -52,58 +51,64 @@ class GetShipmentsUseCaseTest {
             val getShipmentsUseCase = createGetShipmentsUseCase(fakeShipmentsRepository)
             val expectedShipments = listOf(
                 Shipment(
-                    number = "0",
-                    shipmentType = ShipmentType.PARCEL_LOCKER.name,
-                    status = ShipmentStatus.DELIVERED.name,
+                    number = 0L,
+                    shipmentType = ShipmentTypeDTO.PARCEL_LOCKER.name,
+                    status = ShipmentStatus.DELIVERED,
                     operationsHighlight = true,
                     senderEmail = "name@email.com",
-                    dateToShow = null,
-                    dateType = DateType.NO_DATE
+                    pickUpDate = null,
+                    storedDate = null,
+                    expiryDate = null
                 ),
                 Shipment(
-                    number = "1",
-                    shipmentType = ShipmentType.PARCEL_LOCKER.name,
-                    status = ShipmentStatus.DELIVERED.name,
+                    number = 1L,
+                    shipmentType = ShipmentTypeDTO.PARCEL_LOCKER.name,
+                    status = ShipmentStatus.DELIVERED,
                     operationsHighlight = true,
                     senderEmail = "name@email.com",
-                    dateToShow = null,
-                    dateType = DateType.NO_DATE
+                    pickUpDate = null,
+                    storedDate = null,
+                    expiryDate = null
                 ),
                 Shipment(
-                    number = "2",
-                    shipmentType = ShipmentType.PARCEL_LOCKER.name,
-                    status = ShipmentStatus.DELIVERED.name,
+                    number = 2L,
+                    shipmentType = ShipmentTypeDTO.PARCEL_LOCKER.name,
+                    status = ShipmentStatus.DELIVERED,
                     operationsHighlight = true,
                     senderEmail = "name@email.com",
-                    dateToShow = null,
-                    dateType = DateType.NO_DATE
+                    pickUpDate = null,
+                    storedDate = null,
+                    expiryDate = null
                 ),
                 Shipment(
-                    number = "3",
-                    shipmentType = ShipmentType.PARCEL_LOCKER.name,
-                    status = ShipmentStatus.DELIVERED.name,
+                    number = 3L,
+                    shipmentType = ShipmentTypeDTO.PARCEL_LOCKER.name,
+                    status = ShipmentStatus.DELIVERED,
                     operationsHighlight = true,
                     senderEmail = "name@email.com",
-                    dateToShow = null,
-                    dateType = DateType.NO_DATE
+                    pickUpDate = null,
+                    storedDate = null,
+                    expiryDate = null
                 ),
                 Shipment(
-                    number = "4",
-                    shipmentType = ShipmentType.PARCEL_LOCKER.name,
-                    status = ShipmentStatus.DELIVERED.name,
+                    number = 4L,
+                    shipmentType = ShipmentTypeDTO.PARCEL_LOCKER.name,
+                    status = ShipmentStatus.DELIVERED,
                     operationsHighlight = true,
                     senderEmail = "name@email.com",
-                    dateToShow = null,
-                    dateType = DateType.NO_DATE
+                    pickUpDate = null,
+                    storedDate = null,
+                    expiryDate = null
                 ),
                 Shipment(
-                    number = "5",
-                    shipmentType = ShipmentType.PARCEL_LOCKER.name,
-                    status = ShipmentStatus.DELIVERED.name,
+                    number = 5L,
+                    shipmentType = ShipmentTypeDTO.PARCEL_LOCKER.name,
+                    status = ShipmentStatus.DELIVERED,
                     operationsHighlight = true,
                     senderEmail = "name@email.com",
-                    dateToShow = null,
-                    dateType = DateType.NO_DATE
+                    pickUpDate = null,
+                    storedDate = null,
+                    expiryDate = null
                 )
             )
             // when

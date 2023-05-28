@@ -22,8 +22,8 @@ class ShipmentListViewModel @Inject constructor(
     private val groupShipmentsByOperationHighlightUseCase: GroupShipmentsByOperationHighlightUseCase
 ) : ViewModel() {
 
-    private val mutableViewState = MutableLiveData<Map<Boolean, List<Shipment>>>(emptyMap())
-    val viewState: LiveData<Map<Boolean, List<Shipment>>> = mutableViewState
+    private val mutableViewState = MutableLiveData<List<ShipmentItem>>(emptyList())
+    val viewState: LiveData<List<ShipmentItem>> = mutableViewState
 
     init {
         refreshData()
