@@ -1,5 +1,6 @@
 package pl.inpost.recruitmenttask.presentation.shipmentList
 
+import ShipmentAdapter
 import android.os.Bundle
 import android.view.*
 import androidx.core.view.MenuHost
@@ -7,12 +8,13 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import pl.inpost.recruitmenttask.R
 import pl.inpost.recruitmenttask.databinding.FragmentShipmentListBinding
-import pl.inpost.recruitmenttask.databinding.ShipmentItemBinding
 
 
 @AndroidEntryPoint
@@ -22,9 +24,6 @@ class ShipmentListFragment : Fragment() {
     private var _binding: FragmentShipmentListBinding? = null
     private val shipmentAdapter by lazy {
         ShipmentAdapter()
-    }
-    private val shipmentHeaderAdapter by lazy {
-        ShipmentHeaderAdapter()
     }
     private val binding get() = _binding!!
 
@@ -41,26 +40,29 @@ class ShipmentListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.shipmentsView.apply {
-            adapter = ConcatAdapter(shipmentHeaderAdapter, shipmentAdapter)
+            adapter = ConcatAdapter(shipmentAdapter)
             addItemDecoration(SpacingItemDecoration(resources.getDimensionPixelSize(R.dimen.item_spacing)))
         }
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.refreshData()
         }
 
-        viewModel.viewState.observe(requireActivity()) { shipmentItems ->
-            if (shipmentItems.isEmpty()) {
-                binding.emptyShipmentsText.visibility = View.VISIBLE
-            } else {
-                binding.emptyShipmentsText.visibility = View.GONE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.shipmentListState.collect { shipmentListState ->
+                    binding.swipeRefresh.isRefreshing = shipmentListState.isLoading
 
-                val headerItems = shipmentItems.map { it.shipmentType }
-                val shipmentItemsList = shipmentItems.flatMap { it.shipments }
-
-                shipmentHeaderAdapter.setItems(headerItems)
-                shipmentAdapter.setItems(shipmentItemsList)
+                    shipmentListState.shipmentItems?.let { shipmentItems ->
+                        if (shipmentItems.isEmpty()) {
+                            binding.emptyShipmentsText.visibility = View.VISIBLE
+                        } else {
+                            binding.emptyShipmentsText.visibility = View.GONE
+                            shipmentAdapter.setItems(shipmentItems)
+                        }
+                        binding.swipeRefresh.isRefreshing = false
+                    }
+                }
             }
-            binding.swipeRefresh.isRefreshing = false
         }
     }
 

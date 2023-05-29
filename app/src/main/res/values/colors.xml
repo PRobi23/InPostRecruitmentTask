@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#929497</color>
     <color name="arsenic">#404041</color>
-    <color name="light_gray">#BBBDBF</color>
+    <color name="silver_sand_25_alpha">#BBBBBDBF</color>
+    <color name="silver_sand_zero_alpha">#99BBBDBF</color>
 </resources>

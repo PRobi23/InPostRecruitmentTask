@@ -18,11 +18,12 @@ class OrderShipmentsUseCaseTest {
         val useCase = createOrderShipmentsUseCase()
         val firstShipment = ShipmentGenerator.createShipment()
         val secondShipment = ShipmentGenerator.createShipment()
+
         val shipments = listOf(
             firstShipment,
             secondShipment
         )
-        every { comparator.compare(firstShipment, secondShipment) } returns 1
+        every { comparator.compare(any(), any()) } returns 1
 
         // when
         val orderedList = useCase(shipments)

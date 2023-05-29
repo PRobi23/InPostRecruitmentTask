@@ -1,13 +1,16 @@
 package pl.inpost.recruitmenttask.domain.usecase
 
+import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import pl.inpost.recruitmenttask.ShipmentGenerator
+import pl.inpost.recruitmenttask.core.util.Response
 import pl.inpost.recruitmenttask.data.remote.dto.ShipmentTypeDTO
 import pl.inpost.recruitmenttask.data.repository.fake.FakeShipmentRepository
 import pl.inpost.recruitmenttask.domain.data.Shipment
@@ -32,7 +35,9 @@ class GetShipmentsUseCaseTest {
 
         coEvery {
             mockShipmentsRepository.getShipments()
-        } returns createdShipments
+        } returns flowOf(
+            Response.Success(createdShipments)
+        )
 
         // when
         val shipments = getShipmentsUseCase()
@@ -41,7 +46,13 @@ class GetShipmentsUseCaseTest {
         coVerify {
             mockShipmentsRepository.getShipments()
         }
-        Truth.assertThat(shipments).isEqualTo(createdShipments)
+        // then
+        shipments.test {
+            val state = awaitItem()
+            Truth.assertThat(state.data).isEqualTo(createdShipments)
+
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
@@ -51,7 +62,7 @@ class GetShipmentsUseCaseTest {
             val getShipmentsUseCase = createGetShipmentsUseCase(fakeShipmentsRepository)
             val expectedShipments = listOf(
                 Shipment(
-                    number = 0L,
+                    number = "0",
                     shipmentType = ShipmentTypeDTO.PARCEL_LOCKER.name,
                     status = ShipmentStatus.DELIVERED,
                     operationsHighlight = true,
@@ -61,7 +72,7 @@ class GetShipmentsUseCaseTest {
                     expiryDate = null
                 ),
                 Shipment(
-                    number = 1L,
+                    number = "1",
                     shipmentType = ShipmentTypeDTO.PARCEL_LOCKER.name,
                     status = ShipmentStatus.DELIVERED,
                     operationsHighlight = true,
@@ -71,7 +82,7 @@ class GetShipmentsUseCaseTest {
                     expiryDate = null
                 ),
                 Shipment(
-                    number = 2L,
+                    number = "2",
                     shipmentType = ShipmentTypeDTO.PARCEL_LOCKER.name,
                     status = ShipmentStatus.DELIVERED,
                     operationsHighlight = true,
@@ -81,7 +92,7 @@ class GetShipmentsUseCaseTest {
                     expiryDate = null
                 ),
                 Shipment(
-                    number = 3L,
+                    number = "3",
                     shipmentType = ShipmentTypeDTO.PARCEL_LOCKER.name,
                     status = ShipmentStatus.DELIVERED,
                     operationsHighlight = true,
@@ -91,7 +102,7 @@ class GetShipmentsUseCaseTest {
                     expiryDate = null
                 ),
                 Shipment(
-                    number = 4L,
+                    number = "4",
                     shipmentType = ShipmentTypeDTO.PARCEL_LOCKER.name,
                     status = ShipmentStatus.DELIVERED,
                     operationsHighlight = true,
@@ -101,7 +112,7 @@ class GetShipmentsUseCaseTest {
                     expiryDate = null
                 ),
                 Shipment(
-                    number = 5L,
+                    number = "5",
                     shipmentType = ShipmentTypeDTO.PARCEL_LOCKER.name,
                     status = ShipmentStatus.DELIVERED,
                     operationsHighlight = true,
@@ -115,8 +126,13 @@ class GetShipmentsUseCaseTest {
             val shipments = getShipmentsUseCase()
 
             // then
-            Truth.assertThat(shipments.size).isEqualTo(6)
-            Truth.assertThat(shipments).isEqualTo(expectedShipments)
-        }
+            shipments.test {
+                val state = awaitItem()
 
+                Truth.assertThat(state.data!!.size).isEqualTo(6)
+                Truth.assertThat(state.data).isEqualTo(expectedShipments)
+
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
 }

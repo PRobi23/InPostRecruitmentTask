@@ -1,5 +1,6 @@
 package pl.inpost.recruitmenttask
 
+import pl.inpost.recruitmenttask.data.local.entity.ShipmentEntity
 import pl.inpost.recruitmenttask.data.remote.dto.CustomerNetworkDTO
 import pl.inpost.recruitmenttask.data.remote.dto.EventLogNetworkDTO
 import pl.inpost.recruitmenttask.data.remote.dto.OperationsNetworkDTO
@@ -8,6 +9,7 @@ import pl.inpost.recruitmenttask.data.remote.dto.ShipmentStatusDTO
 import pl.inpost.recruitmenttask.data.remote.dto.ShipmentTypeDTO
 import pl.inpost.recruitmenttask.domain.data.Shipment
 import pl.inpost.recruitmenttask.domain.data.ShipmentStatus
+import pl.inpost.recruitmenttask.presentation.shipmentList.ShipmentType
 import java.time.ZonedDateTime
 import kotlin.random.Random.Default.nextInt
 import kotlin.random.Random.Default.nextLong
@@ -23,7 +25,7 @@ object ShipmentGenerator {
         pickUpDate: ZonedDateTime? = DateGenerator.getRandomZonedDateTime(),
         expiryDate: ZonedDateTime? = DateGenerator.getRandomZonedDateTime(),
         storedDate: ZonedDateTime? = DateGenerator.getRandomZonedDateTime(),
-        number: Long = nextLong()
+        number: String = nextLong().toString()
     ): Shipment =
         Shipment(
             number = number,
@@ -36,7 +38,28 @@ object ShipmentGenerator {
             pickUpDate = pickUpDate
         )
 
-    fun mockShipmentNetwork(
+    fun createShipmentEntity(
+        operationsHighlight: Boolean = true,
+        shipmentType: String = randomWord(),
+        status: String = ShipmentStatus.values()[nextInt(ShipmentStatus.values().size - 1)].name,
+        senderEmail: String = randomWord() + "@.gmail.com",
+        pickUpDate: Long? = DateGenerator.getRandomZonedDateTime().toInstant().toEpochMilli(),
+        expiryDate: Long? = DateGenerator.getRandomZonedDateTime().toInstant().toEpochMilli(),
+        storedDate: Long? = DateGenerator.getRandomZonedDateTime().toInstant().toEpochMilli(),
+        number: String = nextLong().toString()
+    ): ShipmentEntity =
+        ShipmentEntity(
+            number = number,
+            shipmentType = shipmentType,
+            status = status,
+            operationsHighlight = operationsHighlight,
+            senderEmail = senderEmail,
+            expiryDate = expiryDate,
+            storedDate = storedDate,
+            pickUpDate = pickUpDate
+        )
+
+    fun createShipmentFromNetwork(
         number: Long,
         type: ShipmentTypeDTO = ShipmentTypeDTO.PARCEL_LOCKER,
         status: ShipmentStatusDTO = ShipmentStatusDTO.DELIVERED,
@@ -49,9 +72,9 @@ object ShipmentGenerator {
         storedDate: ZonedDateTime? = null,
         pickUpDate: ZonedDateTime? = null
     ) = ShipmentDTO(
-        number = number,
+        number = number.toString(),
         shipmentType = type.name,
-        status = status,
+        status = status.name,
         eventLog = eventLog,
         openCode = openCode,
         expiryDate = expiryDate,

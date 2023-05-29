@@ -15,6 +15,7 @@
     <string name="status_ready_to_pickup">Gotowa do odbioru</string>
     <string name="status_returned_to_sender">Zwrot do Nadawcy</string>
 
+    <!--Shipment details-->
     <string name="empty_shipments">Shipments are empty please refresh!</string>
     <string name="shipment_number_title">Shipment number</string>
     <string name="shipment_status_title">Status</string>
@@ -24,5 +25,9 @@
     <string name="shipment_stored_delivery">Stored</string>
     <string name="shipment_pick_up">Pick up</string>
     <string name="unknown_sender_email">Unknown sender e-mail</string>
+
+    <!--Errors-->
+    <string name="unknown_error">Unknown error</string>
+    <string name="no_internet">No internet available</string>
 
 </resources>

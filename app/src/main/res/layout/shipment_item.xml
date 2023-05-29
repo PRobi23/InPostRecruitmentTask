@@ -62,6 +62,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_20dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/shipmentDateValue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/shipmentStatusTitle"
@@ -112,6 +113,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_20dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/shipmentDetailsText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/shipmentSenderEmailTitle"
@@ -124,6 +126,7 @@
         android:layout_height="wrap_content"
         android:text="@string/shipment_details"
         android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/shipmentSenderEmailValue"
         app:layout_constraintEnd_toStartOf="@id/shipmentArrowIcon"
         app:layout_constraintTop_toTopOf="@id/shipmentSenderEmailValue" />

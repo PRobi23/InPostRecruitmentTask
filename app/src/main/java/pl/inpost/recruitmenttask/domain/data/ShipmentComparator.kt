@@ -1,8 +1,9 @@
 package pl.inpost.recruitmenttask.domain.data
 
 import java.time.ZonedDateTime
+import javax.inject.Inject
 
-class ShipmentComparator : Comparator<Shipment> {
+class ShipmentComparator @Inject constructor() : Comparator<Shipment> {
     override fun compare(firstShipment: Shipment, secondShipment: Shipment): Int {
         // Compare the status (order defined in ShipmentStatus.kt)
         val statusComparison = firstShipment.status.compareTo(secondShipment.status)

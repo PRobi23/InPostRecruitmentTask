@@ -3,6 +3,8 @@ package pl.inpost.recruitmenttask.domain.usecase
 import com.google.common.truth.Truth
 import org.junit.Test
 import pl.inpost.recruitmenttask.ShipmentGenerator
+import pl.inpost.recruitmenttask.presentation.shipmentList.ShipmentItem
+import pl.inpost.recruitmenttask.presentation.shipmentList.ShipmentType
 
 class GroupShipmentsByOperationHighlightUseCaseTest {
 
@@ -27,9 +29,21 @@ class GroupShipmentsByOperationHighlightUseCaseTest {
             operationsHighlightFalse2
         )
 
-        val expectedShipments = mapOf(
-            true to listOf(operationsHighlightTrue1, operationsHighlightTrue2),
-            false to listOf(operationsHighlightFalse1, operationsHighlightFalse2)
+        val expectedShipments = listOf(
+            ShipmentItem(
+                shipmentType = ShipmentType.READY_TO_PICK_UP,
+                shipments = listOf(
+                    operationsHighlightTrue1,
+                    operationsHighlightTrue2
+                )
+            ),
+            ShipmentItem(
+                shipmentType = ShipmentType.OTHER,
+                shipments = listOf(
+                    operationsHighlightFalse1,
+                    operationsHighlightFalse2
+                )
+            )
         )
 
         // when

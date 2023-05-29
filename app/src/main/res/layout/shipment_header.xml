@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#BBBDBF">
+    android:layout_height="wrap_content">
 
     <!--Icon -->
     <ImageView
@@ -24,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16dp"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:textColor="@color/silver_sand_zero_alpha"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/shipmentHeaderDividerEnd"

@@ -197,14 +197,14 @@ class ShipmentComparatorTest {
             pickUpDate = pickUpDate,
             expiryDate = expiryDate,
             storedDate = storedDate,
-            number = number
+            number = number.toString()
         )
         val secondShipment = ShipmentGenerator.createShipment(
             status = ShipmentStatus.AVIZO,
             pickUpDate = pickUpDate,
             expiryDate = expiryDate,
             storedDate = storedDate,
-            number = number - 1
+            number = (number - 1).toString()
         )
         val comparator = createComparator()
 
@@ -228,14 +228,14 @@ class ShipmentComparatorTest {
             pickUpDate = pickUpDate,
             expiryDate = expiryDate,
             storedDate = storedDate,
-            number = number
+            number = number.toString()
         )
         val secondShipment = ShipmentGenerator.createShipment(
             status = ShipmentStatus.AVIZO,
             pickUpDate = pickUpDate,
             expiryDate = expiryDate,
             storedDate = storedDate,
-            number = number + 1
+            number = (number + 1).toString()
         )
         val comparator = createComparator()
 
