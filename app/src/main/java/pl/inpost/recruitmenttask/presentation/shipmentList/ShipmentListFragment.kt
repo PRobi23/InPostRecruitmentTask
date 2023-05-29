@@ -3,6 +3,7 @@ package pl.inpost.recruitmenttask.presentation.shipmentList
 import ShipmentAdapter
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -23,7 +24,7 @@ class ShipmentListFragment : Fragment() {
     private val viewModel: ShipmentListViewModel by viewModels()
     private var _binding: FragmentShipmentListBinding? = null
     private val shipmentAdapter by lazy {
-        ShipmentAdapter()
+        ShipmentAdapter(viewModel::archiveShipment)
     }
     private val binding get() = _binding!!
 
@@ -52,14 +53,9 @@ class ShipmentListFragment : Fragment() {
                 viewModel.shipmentListState.collect { shipmentListState ->
                     binding.swipeRefresh.isRefreshing = shipmentListState.isLoading
 
-                    shipmentListState.shipmentItems?.let { shipmentItems ->
-                        if (shipmentItems.isEmpty()) {
-                            binding.emptyShipmentsText.visibility = View.VISIBLE
-                        } else {
-                            binding.emptyShipmentsText.visibility = View.GONE
-                            shipmentAdapter.setItems(shipmentItems)
-                        }
-                        binding.swipeRefresh.isRefreshing = false
+                    if (!shipmentListState.isLoading) {
+                        showError(shipmentListState)
+                        showListItems(shipmentListState)
                     }
                 }
             }
@@ -96,5 +92,28 @@ class ShipmentListFragment : Fragment() {
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+
+    private fun showListItems(shipmentListState: ShipmentListState) {
+        shipmentListState.shipmentItems?.let { shipmentItems ->
+            if (shipmentItems.isEmpty() && !shipmentListState.isLoading) {
+                binding.emptyShipmentsText.visibility = View.VISIBLE
+            } else {
+                binding.emptyShipmentsText.visibility = View.GONE
+                shipmentAdapter.setItems(shipmentItems)
+            }
+            binding.swipeRefresh.isRefreshing = false
+        }
+    }
+
+    private fun showError(shipmentListState: ShipmentListState) {
+        shipmentListState.error?.let {
+            Toast.makeText(
+                requireContext(),
+                it.asString(requireContext()),
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 }

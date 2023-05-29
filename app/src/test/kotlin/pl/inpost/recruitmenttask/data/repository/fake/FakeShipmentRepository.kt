@@ -29,4 +29,8 @@ class FakeShipmentRepository : ShipmentRepository {
         }
         return flowOf(Response.Success(shipments))
     }
+
+    override suspend fun archiveShipment(shipment: Shipment): Flow<Response<Unit>> {
+        return flowOf(Response.Success(Unit))
+    }
 }

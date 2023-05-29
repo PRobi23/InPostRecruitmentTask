@@ -15,4 +15,9 @@ interface ShipmentRepository {
      * @return List of shipments in flow
      */
     suspend fun getShipments(): Flow<Response<List<Shipment>>>
+
+    /***
+     * Archive shipment. Set the archive number unique id to the database.
+     */
+    suspend fun archiveShipment(shipment: Shipment): Flow<Response<Unit>>
 }

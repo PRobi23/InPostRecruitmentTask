@@ -143,5 +143,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/shipmentDetailsText" />
 
+    <!--Button-->
+    <Button
+        android:id="@+id/shipmentArchiveButton"
+        style="@style/Widget.Material3.Button.UnelevatedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20dp"
+        android:text="@string/shipment_archive_button_text"
+        android:textSize="@dimen/textsize_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shipmentSenderEmailValue" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

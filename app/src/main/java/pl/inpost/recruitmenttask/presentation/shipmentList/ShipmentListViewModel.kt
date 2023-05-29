@@ -13,13 +13,12 @@ import pl.inpost.recruitmenttask.domain.data.Shipment
 import pl.inpost.recruitmenttask.domain.usecase.GetShipmentsUseCase
 import pl.inpost.recruitmenttask.domain.usecase.GroupShipmentsByOperationHighlightUseCase
 import pl.inpost.recruitmenttask.domain.usecase.OrderShipmentsUseCase
+import pl.inpost.recruitmenttask.domain.usecase.ShipmentUseCases
 import javax.inject.Inject
 
 @HiltViewModel
 class ShipmentListViewModel @Inject constructor(
-    private val getShipmentsUseCase: GetShipmentsUseCase,
-    private val groupShipmentsByOperationHighlightUseCase: GroupShipmentsByOperationHighlightUseCase,
-    private val orderShipmentsUseCase: OrderShipmentsUseCase
+    private val shipmentsUseCases: ShipmentUseCases
 ) : ViewModel() {
 
     private val _shipmentListState = MutableStateFlow<ShipmentListState>(ShipmentListState())
@@ -31,8 +30,30 @@ class ShipmentListViewModel @Inject constructor(
 
     fun refreshData() {
         viewModelScope.launch {
-            getShipmentsUseCase().onEach { result ->
+            shipmentsUseCases.getShipmentsUseCase().onEach { result ->
                 setStateByResponseResult(result)
+            }.launchIn(viewModelScope)
+        }
+    }
+
+    fun archiveShipment(shipment: Shipment) {
+        viewModelScope.launch {
+            shipmentsUseCases.archiveShipmentUseCase(shipment).onEach { result ->
+                when (result) {
+                    is Response.Error -> {
+                        _shipmentListState.value =
+                            ShipmentListState(isLoading = false, error = result.error)
+                    }
+
+                    is Response.Loading -> {
+                        _shipmentListState.value =
+                            ShipmentListState(isLoading = true)
+                    }
+
+                    is Response.Success -> {
+                        refreshData()
+                    }
+                }
             }.launchIn(viewModelScope)
         }
     }
@@ -41,9 +62,10 @@ class ShipmentListViewModel @Inject constructor(
         when (result) {
             is Response.Success -> {
                 val shipments = result.data ?: emptyList()
-                val groupedShipments = groupShipmentsByOperationHighlightUseCase(shipments)
+                val groupedShipments =
+                    shipmentsUseCases.groupShipmentsByOperationHighlightUseCase(shipments)
                 groupedShipments.forEach {
-                    orderShipmentsUseCase(it.shipments)
+                    shipmentsUseCases.orderShipmentsUseCase(it.shipments)
                 }
                 _shipmentListState.value =
                     ShipmentListState(isLoading = false, shipmentItems = groupedShipments)

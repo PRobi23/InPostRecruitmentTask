@@ -8,6 +8,7 @@
     <!--Text size-->
     <dimen name="textsize_shipment_header">11sp</dimen>
     <dimen name="textsize_shipment_value">15sp</dimen>
+    <dimen name="textsize_button">16sp</dimen>
 
     <!--Line height-->
     <dimen name="textline_shipment_header">16sp</dimen>

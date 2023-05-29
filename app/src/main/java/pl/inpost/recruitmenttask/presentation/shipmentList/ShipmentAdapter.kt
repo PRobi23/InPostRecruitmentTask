@@ -13,7 +13,8 @@ import pl.inpost.recruitmenttask.domain.mapper.getDateType
 import pl.inpost.recruitmenttask.presentation.shipmentList.ShipmentItem
 import pl.inpost.recruitmenttask.presentation.shipmentList.ShipmentType
 
-class ShipmentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ShipmentAdapter(private val archiveShipmentFunction: (shipment: Shipment) -> Unit) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val shipmentItems: MutableList<ShipmentItem> = mutableListOf()
 
@@ -70,7 +71,7 @@ class ShipmentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         var cumulativeItemCount = 0
-        shipmentItems.forEachIndexed { index, (header, items) ->
+        shipmentItems.forEachIndexed { _, (header, items) ->
             if (position == cumulativeItemCount) {
                 val headerViewHolder = holder as HeaderViewHolder
                 headerViewHolder.bind(header)
@@ -85,8 +86,6 @@ class ShipmentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             cumulativeItemCount += items.size + 1 // Add 1 for the header
         }
     }
-
-    // ...
 
     inner class HeaderViewHolder(val binding: ShipmentHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -136,6 +135,9 @@ class ShipmentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     shipment.senderEmail ?: itemView.context.getText(
                         R.string.unknown_sender_email
                     )
+                shipmentArchiveButton.setOnClickListener {
+                    archiveShipmentFunction(shipment)
+                }
             }
         }
     }

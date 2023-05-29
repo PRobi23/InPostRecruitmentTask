@@ -14,9 +14,9 @@ import pl.inpost.recruitmenttask.core.analytics.AnalyticsImpl
 import pl.inpost.recruitmenttask.core.dateTime.DateTimeUtils
 import pl.inpost.recruitmenttask.core.dateTime.DateTimeUtilsImpl
 import pl.inpost.recruitmenttask.core.util.Constants
+import pl.inpost.recruitmenttask.data.local.ShipmentsDatabase
+import pl.inpost.recruitmenttask.data.local.dao.ShipmentsDao
 import pl.inpost.recruitmenttask.data.local.entity.ShipmentEntity
-import pl.inpost.recruitmenttask.data.local.entity.ShipmentsDao
-import pl.inpost.recruitmenttask.data.local.entity.ShipmentsDatabase
 import pl.inpost.recruitmenttask.data.remote.api.MockShipmentApi
 import pl.inpost.recruitmenttask.data.remote.dto.ShipmentDTO
 import pl.inpost.recruitmenttask.data.repository.ShipmentRepositoryImpl
@@ -24,6 +24,8 @@ import pl.inpost.recruitmenttask.domain.data.Shipment
 import pl.inpost.recruitmenttask.domain.mapper.Mapper
 import pl.inpost.recruitmenttask.domain.mapper.ShipmentDtoToShipmentEntityMapper
 import pl.inpost.recruitmenttask.domain.mapper.ShipmentEntityToShipmentMapper
+import pl.inpost.recruitmenttask.domain.mapper.ShipmentMappers
+import pl.inpost.recruitmenttask.domain.mapper.ShipmentToShipmentEntityMapper
 import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -59,8 +61,25 @@ object ShipmentsAppModule {
         ShipmentDtoToShipmentEntityMapper(dateTimeUtils)
 
     @Provides
-    fun providesShipmentDao(appDatabase: ShipmentsDatabase): ShipmentsDao {
-        return appDatabase.getShipmentDao
+    fun providesShipmenToShipmentEntityMapper(dateTimeUtils: DateTimeUtils): Mapper<Shipment, ShipmentEntity> =
+        ShipmentToShipmentEntityMapper(dateTimeUtils)
+
+    @Provides
+    fun provideShipmentMappers(
+        shipmentEntityToShipmentMapper: Mapper<ShipmentEntity, Shipment>,
+        shipmentToShipmentEntityMapper: Mapper<Shipment, ShipmentEntity>,
+        shipmentDtoToShipmentEntityMapper: Mapper<ShipmentDTO, ShipmentEntity>,
+    ): ShipmentMappers {
+        return ShipmentMappers(
+            shipmentEntityToShipmentMapper,
+            shipmentToShipmentEntityMapper,
+            shipmentDtoToShipmentEntityMapper
+        )
+    }
+
+    @Provides
+    fun providesShipmentsDao(appDatabase: ShipmentsDatabase): ShipmentsDao {
+        return appDatabase.getShipmentsDao
     }
 
     @Provides
@@ -77,14 +96,12 @@ object ShipmentsAppModule {
     @Provides
     fun provideShipmentRepository(
         mockShipmentApi: MockShipmentApi,
-        mapperShipmentEntityToShipmentMapper: Mapper<ShipmentEntity, Shipment>,
-        shipmentDtoToShipmentEntityMapper: Mapper<ShipmentDTO, ShipmentEntity>,
+        shipmentMappers: ShipmentMappers,
         analytics: Analytics,
         @DefaultDispatcher dispatcher: CoroutineDispatcher,
         shipmentsDao: ShipmentsDao
     ): ShipmentRepository = ShipmentRepositoryImpl(
-        mockShipmentApi, mapperShipmentEntityToShipmentMapper,
-        shipmentDtoToShipmentEntityMapper, analytics,
+        mockShipmentApi, shipmentMappers, analytics,
         dispatcher, shipmentsDao
     )
 }

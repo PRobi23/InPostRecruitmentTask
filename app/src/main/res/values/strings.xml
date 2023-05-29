@@ -23,6 +23,7 @@
     <string name="shipment_details">Details</string>
     <string name="shipment_expiry_delivery">Expiry</string>
     <string name="shipment_stored_delivery">Stored</string>
+    <string name="shipment_archive_button_text">Archive</string>
     <string name="shipment_pick_up">Pick up</string>
     <string name="unknown_sender_email">Unknown sender e-mail</string>
 

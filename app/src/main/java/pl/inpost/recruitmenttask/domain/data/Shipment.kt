@@ -10,5 +10,6 @@ data class Shipment(
     val senderEmail: String?,
     val expiryDate: ZonedDateTime?,
     val storedDate: ZonedDateTime?,
-    val pickUpDate: ZonedDateTime?
+    val pickUpDate: ZonedDateTime?,
+    val archived: Boolean = false
 )

@@ -11,19 +11,16 @@ import pl.inpost.recruitmenttask.core.analytics.Analytics
 import pl.inpost.recruitmenttask.core.di.DefaultDispatcher
 import pl.inpost.recruitmenttask.core.util.Response
 import pl.inpost.recruitmenttask.core.util.UiText
-import pl.inpost.recruitmenttask.data.local.entity.ShipmentEntity
-import pl.inpost.recruitmenttask.data.local.entity.ShipmentsDao
+import pl.inpost.recruitmenttask.data.local.dao.ShipmentsDao
 import pl.inpost.recruitmenttask.data.remote.api.MockShipmentApi
-import pl.inpost.recruitmenttask.data.remote.dto.ShipmentDTO
 import pl.inpost.recruitmenttask.domain.data.Shipment
-import pl.inpost.recruitmenttask.domain.mapper.Mapper
+import pl.inpost.recruitmenttask.domain.mapper.ShipmentMappers
 import pl.inpost.recruitmenttask.domain.repository.ShipmentRepository
 import java.io.IOException
 
 class ShipmentRepositoryImpl(
     private val shipmentApi: MockShipmentApi,
-    private val shipmentEntityToShipmentMapper: Mapper<ShipmentEntity, Shipment>,
-    private val shipmentDtoToShipmentEntityMapper: Mapper<ShipmentDTO, ShipmentEntity>,
+    private val shipmentMappers: ShipmentMappers,
     private val analytics: Analytics,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     private val shipmentsDao: ShipmentsDao
@@ -39,12 +36,27 @@ class ShipmentRepositoryImpl(
         delay(1000)
 
         fetchAndRefreshDatabase()
-        //This depends on the requirement. Do we want to shoe anyway the shipments or not? To this we can get from error as well
-        val shipments =
-            shipmentsDao.getAllShipments().map { shipmentEntityToShipmentMapper.map(it) }
+        val shipments = shipmentsDao.getAllActiveShipments()
+            .map { shipmentMappers.shipmentEntityToShipmentMapper.map(it) }
         emit(Response.Success(shipments))
 
     }.flowOn(defaultDispatcher)
+
+    override suspend fun archiveShipment(shipment: Shipment): Flow<Response<Unit>> = flow {
+        emit(Response.Loading())
+        try {
+            val shipmentEntity =
+                shipmentMappers.shipmentToShipmentEntityMapper.map(shipment).copy(archived = true)
+            val existingShipmentEntity = shipmentsDao.getShipmentByNumber(shipment.number)
+
+            shipmentsDao.update(shipmentEntity.copy(id = existingShipmentEntity.id))
+
+            emit(Response.Success(Unit))
+        } catch (e: Exception) {
+            analytics.logError()
+            emit(Response.Error<Unit>(UiText.StringResource(R.string.unknown_error)))
+        }
+    }
 
     private suspend fun FlowCollector<Response<List<Shipment>>>.fetchAndRefreshDatabase() {
         try {
@@ -54,12 +66,16 @@ class ShipmentRepositoryImpl(
             } else {
                 shipmentApi.response.shipments
             }
-            val shipmentEntity =
-                shipmentDto.map {
-                    shipmentDtoToShipmentEntityMapper.map(it)
+            val archivedShipments = shipmentsDao.getAllArchivedShipments()
+            val shipmentEntities = shipmentDto.map {
+                shipmentMappers.shipmentDtoToShipmentEntityMapper.map(it)
+            }.filterNot { entity ->
+                archivedShipments.any { archivedEntity ->
+                    archivedEntity.number == entity.number
                 }
-            shipmentsDao.deleteAllShipments()
-            shipmentsDao.insertShipments(shipmentEntity)
+            }
+            shipmentsDao.deleteAllActiveShipments()
+            shipmentsDao.insertShipments(shipmentEntities)
         } catch (e: IOException) {
             emit(Response.Error<List<Shipment>>(UiText.StringResource(R.string.no_internet)))
             analytics.logError()

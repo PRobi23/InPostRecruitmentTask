@@ -23,7 +23,8 @@ class ShipmentEntityToShipmentMapper(private val dateTimeUtils: DateTimeUtils) :
         senderEmail = input.senderEmail,
         expiryDate = input.expiryDate?.let { dateTimeUtils.epochMillisecondsToZonedDateTime(it) },
         storedDate = input.storedDate?.let { dateTimeUtils.epochMillisecondsToZonedDateTime(it) },
-        pickUpDate = input.pickUpDate?.let { dateTimeUtils.epochMillisecondsToZonedDateTime(it) }
+        pickUpDate = input.pickUpDate?.let { dateTimeUtils.epochMillisecondsToZonedDateTime(it) },
+        archived = input.archived
     )
 
     private fun getShipmentStatusByValue(value: String): ShipmentStatus {

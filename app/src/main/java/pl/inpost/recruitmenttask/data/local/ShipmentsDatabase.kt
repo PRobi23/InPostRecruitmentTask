@@ -1,7 +1,9 @@
-package pl.inpost.recruitmenttask.data.local.entity
+package pl.inpost.recruitmenttask.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import pl.inpost.recruitmenttask.data.local.dao.ShipmentsDao
+import pl.inpost.recruitmenttask.data.local.entity.ShipmentEntity
 
 /***
  * Favourite images database class.
@@ -13,5 +15,5 @@ import androidx.room.RoomDatabase
 )
 abstract class ShipmentsDatabase : RoomDatabase() {
 
-    abstract val getShipmentDao: ShipmentsDao
+    abstract val getShipmentsDao: ShipmentsDao
 }
