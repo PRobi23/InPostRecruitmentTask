@@ -3,6 +3,7 @@ package pl.inpost.recruitmenttask.presentation
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,6 +17,7 @@ import pl.inpost.recruitmenttask.core.util.Response
 import pl.inpost.recruitmenttask.core.util.UiText
 import pl.inpost.recruitmenttask.domain.data.Shipment
 import pl.inpost.recruitmenttask.domain.usecase.ArchiveShipmentUseCase
+import pl.inpost.recruitmenttask.domain.usecase.FilterShipmentsUseCase
 import pl.inpost.recruitmenttask.domain.usecase.GetShipmentsUseCase
 import pl.inpost.recruitmenttask.domain.usecase.GroupShipmentsByOperationHighlightUseCase
 import pl.inpost.recruitmenttask.domain.usecase.OrderShipmentsUseCase
@@ -32,6 +34,7 @@ class ShipmentListViewModelTest {
         spyk(GroupShipmentsByOperationHighlightUseCase())
     private val orderShipmentsUseCase: OrderShipmentsUseCase = mockk()
     private val archiveShipmentUseCase: ArchiveShipmentUseCase = mockk()
+    private val filterShipmentsUseCase: FilterShipmentsUseCase = mockk()
 
     @get:Rule
     var coroutinesTestRule = MainDispatcherCoroutinesTestRule()
@@ -41,7 +44,8 @@ class ShipmentListViewModelTest {
             getShipmentsUseCase = getShipmentsUseCase,
             groupShipmentsByOperationHighlightUseCase = groupShipmentsByOperationHighlightUseCase,
             orderShipmentsUseCase = orderShipmentsUseCase,
-            archiveShipmentUseCase = archiveShipmentUseCase
+            archiveShipmentUseCase = archiveShipmentUseCase,
+            filterShipmentsUseCase = filterShipmentsUseCase
         )
     )
 
@@ -76,7 +80,7 @@ class ShipmentListViewModelTest {
                 operationsHighlight = false
             )
             val operationsHighlightTrueShipment = ShipmentGenerator.createShipment(
-                operationsHighlight = false
+                operationsHighlight = true
             )
             val shipments =
                 listOf(operationsHighlightFalseShipment, operationsHighlightTrueShipment)
@@ -105,6 +109,9 @@ class ShipmentListViewModelTest {
             coEvery {
                 orderShipmentsUseCase(listOf(operationsHighlightTrueShipment))
             } returns listOf(operationsHighlightTrueShipment)
+            every {
+                filterShipmentsUseCase(groupedShipments, FilterShipmentsUseCase.Filter.ALL)
+            } returns groupedShipments
 
             val viewModel = createShipmentListViewModel()
 
@@ -127,7 +134,7 @@ class ShipmentListViewModelTest {
                 operationsHighlight = false
             )
             val operationsHighlightTrueShipment = ShipmentGenerator.createShipment(
-                operationsHighlight = false
+                operationsHighlight = true
             )
             val shipments =
                 listOf(operationsHighlightTrueShipment)
@@ -155,7 +162,9 @@ class ShipmentListViewModelTest {
             coEvery {
                 orderShipmentsUseCase(listOf(operationsHighlightTrueShipment))
             } returns listOf(operationsHighlightTrueShipment)
-
+            every {
+                filterShipmentsUseCase(groupedShipments, FilterShipmentsUseCase.Filter.ALL)
+            } returns groupedShipments
             val viewModel = createShipmentListViewModel()
 
             // when

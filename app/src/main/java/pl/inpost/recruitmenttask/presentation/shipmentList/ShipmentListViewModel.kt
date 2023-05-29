@@ -10,9 +10,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import pl.inpost.recruitmenttask.core.util.Response
 import pl.inpost.recruitmenttask.domain.data.Shipment
-import pl.inpost.recruitmenttask.domain.usecase.GetShipmentsUseCase
-import pl.inpost.recruitmenttask.domain.usecase.GroupShipmentsByOperationHighlightUseCase
-import pl.inpost.recruitmenttask.domain.usecase.OrderShipmentsUseCase
+import pl.inpost.recruitmenttask.domain.usecase.FilterShipmentsUseCase
 import pl.inpost.recruitmenttask.domain.usecase.ShipmentUseCases
 import javax.inject.Inject
 
@@ -24,6 +22,9 @@ class ShipmentListViewModel @Inject constructor(
     private val _shipmentListState = MutableStateFlow<ShipmentListState>(ShipmentListState())
     val shipmentListState: StateFlow<ShipmentListState> = _shipmentListState
 
+    private var originalShipmentItems: List<ShipmentItem> = emptyList()
+    private var appliedFilter: FilterShipmentsUseCase.Filter = FilterShipmentsUseCase.Filter.ALL
+
     init {
         refreshData()
     }
@@ -34,6 +35,18 @@ class ShipmentListViewModel @Inject constructor(
                 setStateByResponseResult(result)
             }.launchIn(viewModelScope)
         }
+    }
+
+    fun filterShipments(filter: FilterShipmentsUseCase.Filter): List<ShipmentItem> {
+        if (originalShipmentItems.isNotEmpty()) {
+            appliedFilter = filter
+            val filteredItems =
+                shipmentsUseCases.filterShipmentsUseCase(originalShipmentItems, filter)
+            _shipmentListState.value = shipmentListState.value.copy(shipmentItems = filteredItems)
+
+            return filteredItems
+        }
+        return emptyList()
     }
 
     fun archiveShipment(shipment: Shipment) {
@@ -67,8 +80,10 @@ class ShipmentListViewModel @Inject constructor(
                 groupedShipments.forEach {
                     shipmentsUseCases.orderShipmentsUseCase(it.shipments)
                 }
+                originalShipmentItems = groupedShipments
+                val filteredShipments = filterShipments(appliedFilter)
                 _shipmentListState.value =
-                    ShipmentListState(isLoading = false, shipmentItems = groupedShipments)
+                    ShipmentListState(isLoading = false, shipmentItems = filteredShipments)
             }
 
             is Response.Error -> {

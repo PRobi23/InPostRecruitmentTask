@@ -6,5 +6,6 @@ data class ShipmentUseCases @Inject constructor(
     val getShipmentsUseCase: GetShipmentsUseCase,
     val groupShipmentsByOperationHighlightUseCase: GroupShipmentsByOperationHighlightUseCase,
     val orderShipmentsUseCase: OrderShipmentsUseCase,
-    val archiveShipmentUseCase: ArchiveShipmentUseCase
+    val archiveShipmentUseCase: ArchiveShipmentUseCase,
+    val filterShipmentsUseCase: FilterShipmentsUseCase
 )

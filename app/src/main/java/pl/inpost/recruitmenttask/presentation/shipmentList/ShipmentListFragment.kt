@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import pl.inpost.recruitmenttask.R
 import pl.inpost.recruitmenttask.databinding.FragmentShipmentListBinding
+import pl.inpost.recruitmenttask.domain.usecase.FilterShipmentsUseCase
 
 
 @AndroidEntryPoint
@@ -77,14 +78,17 @@ class ShipmentListFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.readyToPickupShipmentsMenu -> {
+                        viewModel.filterShipments(filter = FilterShipmentsUseCase.Filter.READY_TO_PICK_UP)
                         true
                     }
 
                     R.id.otherShipmentsMenu -> {
+                        viewModel.filterShipments(filter = FilterShipmentsUseCase.Filter.OTHER)
                         true
                     }
 
                     R.id.allShipmentsMenu -> {
+                        viewModel.filterShipments(filter = FilterShipmentsUseCase.Filter.ALL)
                         true
                     }
 
